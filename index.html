@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Giphy App!</title>
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+	<style>
+		.movie-btn {
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 14px 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			border-radius: 5px;
+			margin: 5px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="initialMovieListButtons">
+
+	</div>
+
+	<form id="addMovieForm">
+
+		Add a Movie!:
+		<br>
+		<br>
+		<input type="text" id="movieTitle">
+		<br>
+		<br>
+
+		<input id="addMovie" type="submit" value="submit">
+
+
+	</form>
+
+	<div id="movieGifs">
+
+	</div>
+
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$('document').ready(function () {
+
+
+			var movies = ["The Blues Brothers", "Friday", "Goodfellas", "Scrooged", "Bad Santa", "The Big Lebowski", "Four Rooms", "So I Married An Axe Murderer"];
+			var apikey = "ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8";
+			var movieTitle;
+
+
+
+
+			function showButtons() {
+
+				$("#initialMovieListButtons").empty();
+
+				for (var i = 0; i < movies.length; i++) {
+
+					var topicbutton = $("<button>");
+
+					topicbutton.addClass("movie-btn");
+					topicbutton.attr("data-name", movies[i]);
+					topicbutton.text(movies[i]);
+					$("#initialMovieListButtons").append(topicbutton);
+
+					console.log(movies[i]);
+
+
+				}
+			}
+
+			//adding button once a movie is suggested
+			$("#addMovie").on("click", function (event) {
+				//stops page from refreshing
+				event.preventDefault();
+				//create a place for our input to go and make it look nice
+				var movie = $("#movieTitle").val().trim();
+
+				// Adding movie from the textbox to our array
+				movies.push(movie);
+				//uses array to show buttons
+				showButtons();
+				//test
+				console.log(movies);
+				//clears the input box for the next suggestion
+				$("#movieTitle").val(" ");
+			});
+
+
+
+			//ajax query to queryURL 
+			function displayPulledGifs() {
+
+				var movie = $(this).attr("data-name");
+				var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=1";
+
+				$.ajax({
+					url: queryURL,
+					method: "GET"
+				}).then(function (response) {
+
+					// from giphy api documentation 
+					//javascript, jQuery 
+					//var xhr = $.get("https://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=jAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=5");
+					//xhr.done(function (data) { console.log("success got data", data); });
+
+					var apiData = response;
+					console.log("success got data", response);
+
+					// var rating = response.data.rating;
+					// console.log(rating);
+
+					//get image url and display it with jquery
+					var imageUrl = response.data.image_original_url;
+					console.log(imageUrl);
+
+					var movieGif = $("<img>");
+					movieGif.attr("src", imageUrl);
+					movieGif.attr("alt", "movie image");
+
+					$("#movieGifs").prepend(movieGif);
+
+
+
+
+				});
+
+			}
+
+
+
+
+
+			showButtons();
+			$(document).on("click", ".movie-btn", displayPulledGifs);
+		});
+
+	</script>
+
+</body>
+
+</html>
