@@ -106,7 +106,7 @@
 			function displayPulledGifs() {
 
 				var movie = $(this).attr("data-name");
-				var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=1";
+				var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=9";
 
 				$.ajax({
 					url: queryURL,
@@ -118,25 +118,37 @@
 					//var xhr = $.get("https://api.giphy.com/v1/gifs/search?q=ryan+gosling&api_key=jAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=5");
 					//xhr.done(function (data) { console.log("success got data", data); });
 
-					var apiData = response;
+					var apiData = response.data;
 					console.log("success got data", response);
 
 					// var rating = response.data.rating;
 					// console.log(rating);
 
+
 					//get image url and display it with jquery
-					var imageUrl = response.data.image_original_url;
-					console.log(imageUrl);
+					//do it 9 times in a for loop
+					for (var i = 0; i < apiData.length; i++) {
 
-					var movieGif = $("<img>");
-					movieGif.attr("src", imageUrl);
-					movieGif.attr("alt", "movie image");
+						var movieGif = $("<img>");
+						// var p = $("<p>").text("Rating: " + apiData[i].rating);
 
-					$("#movieGifs").prepend(movieGif);
-
-
+						movieGif.attr("src", apiData[i].images.fixed_height.url);
+						movieGif.attr("alt", "data-name" + "gif" + apiData[i]);
 
 
+
+
+						// console.log(imageUrl);
+
+
+
+						// movieGif.attr("alt", "movie image");
+
+						$("#movieGifs").prepend(movieGif);
+
+
+
+					}
 				});
 
 			}
