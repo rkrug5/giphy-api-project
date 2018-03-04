@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Giphy App!</title>
 
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+	 crossorigin="anonymous">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
@@ -23,32 +24,63 @@
 			border-radius: 5px;
 			margin: 5px;
 		}
+
+		#gifCollection {
+			float: left;
+			background-color: slategray;
+		}
+
+		#formholder {
+			background-color: slategray;
+		}
+
+		#initialMovieListButtons {
+			background-color: slategray;
+			margin-bottom: 20px;
+		}
+
+		body {
+			background-color: slategray;
+		}
+
+
+		.gif {
+			margin: 10px 10px 0px 0px;
+			float: left;
+		}
+
+		p {
+			text-align: center;
+		}
 	</style>
 </head>
 
 <body>
 
-	<div id="initialMovieListButtons">
+	<div id="initialMovieListButtons"></div>
 
+
+	<div class="row">
+
+		<div class="col-xs-9" id="gifCollection">
+
+		</div>
+		<div class="col-xs-3" id="formholder">
+			<form id="addMovieForm">
+
+				<h3>Add a Movie!:</h3>
+
+
+				<input type="text" id="movieTitle">
+				<br>
+				<br>
+				<input id="addMovie" type="submit" value="submit">
+
+			</form>
+		</div>
 	</div>
 
-	<form id="addMovieForm">
 
-		Add a Movie!:
-		<br>
-		<br>
-		<input type="text" id="movieTitle">
-		<br>
-		<br>
-
-		<input id="addMovie" type="submit" value="submit">
-
-
-	</form>
-
-	<div id="movieGifs">
-
-	</div>
 
 
 
@@ -66,10 +98,14 @@
 
 			function showButtons() {
 
+				//clears div to avoid duplicate buttons
 				$("#initialMovieListButtons").empty();
 
+				//loops through our array to make a button for each movie
 				for (var i = 0; i < movies.length; i++) {
 
+
+					//creates a variable to store our button
 					var topicbutton = $("<button>");
 
 					topicbutton.addClass("movie-btn");
@@ -102,11 +138,11 @@
 
 
 
-			//ajax query to queryURL 
+			//ajax call to queryURL 
 			function displayPulledGifs() {
 
 				var movie = $(this).attr("data-name");
-				var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=9";
+				var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + movie + "&api_key=ljAoPP2wCtxvB68gzS9cDEf9jwTjHnV8&limit=2";
 
 				$.ajax({
 					url: queryURL,
@@ -125,28 +161,43 @@
 					// console.log(rating);
 
 
-					//get image url and display it with jquery
+					//get image url, rating info, and display it with jquery
 					//do it 9 times in a for loop
 					for (var i = 0; i < apiData.length; i++) {
 
+
+						//creates a div to hold the image and rating
+						var gifHolder = $("<div class='gif'>");
+
+
+
+						//creates a var to hold the image
 						var movieGif = $("<img>");
-						// var p = $("<p>").text("Rating: " + apiData[i].rating);
+
+						//creates a variable for the rating
+						var rating = apiData[i].rating;
+						console.log(rating);
+
+						var ratingTag = $("<p>").text("Rating: " + rating);
+
+						gifHolder.append(ratingTag);
 
 						movieGif.attr("src", apiData[i].images.fixed_height.url);
-						movieGif.attr("alt", "data-name" + "gif" + apiData[i]);
 
 
+						// this is the more generic movie gif description
+						// movieGif.attr("alt", "movie gif");
+
+						//this alt description actually changes with which movie button is pressed.  
+						movieGif.attr("alt", movie + " image");
 
 
-						// console.log(imageUrl);
+						gifHolder.append(movieGif);
+						// $("#movieGifs").prepend(movieGif);
+						// $("#rating").val(ratingTag);
 
 
-
-						// movieGif.attr("alt", "movie image");
-
-						$("#movieGifs").prepend(movieGif);
-
-
+						$("#gifCollection").prepend(gifHolder);
 
 					}
 				});
