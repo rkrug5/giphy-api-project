@@ -1,0 +1,40 @@
+.movie-btn {
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 14px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	border-radius: 5px;
+	margin: 5px;
+}
+
+#gifCollection {
+	float: left;
+	background-color: slategray;
+}
+
+#formholder {
+	background-color: slategray;
+}
+
+#initialMovieListButtons {
+	background-color: slategray;
+	margin-bottom: 20px;
+}
+
+body {
+	background-color: slategray;
+}
+
+
+.gif {
+	margin: 10px 10px 0px 0px;
+	float: left;
+}
+
+p {
+	text-align: center;
+}
